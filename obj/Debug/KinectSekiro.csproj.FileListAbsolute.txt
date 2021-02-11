@@ -1,0 +1,13 @@
+X:\Programming\C#\KinectKiro\bin\Debug\KinectSekiro.exe.config
+X:\Programming\C#\KinectKiro\bin\Debug\KinectSekiro.exe
+X:\Programming\C#\KinectKiro\bin\Debug\KinectSekiro.pdb
+X:\Programming\C#\KinectKiro\bin\Debug\Microsoft.Kinect.dll
+X:\Programming\C#\KinectKiro\bin\Debug\Microsoft.Kinect.xml
+X:\Programming\C#\KinectKiro\obj\Debug\KinectSekiro.csprojAssemblyReference.cache
+X:\Programming\C#\KinectKiro\obj\Debug\KinectSekiro.Form1.resources
+X:\Programming\C#\KinectKiro\obj\Debug\KinectSekiro.Properties.Resources.resources
+X:\Programming\C#\KinectKiro\obj\Debug\KinectSekiro.csproj.GenerateResource.cache
+X:\Programming\C#\KinectKiro\obj\Debug\KinectSekiro.csproj.CoreCompileInputs.cache
+X:\Programming\C#\KinectKiro\obj\Debug\KinectSekiro.csproj.CopyComplete
+X:\Programming\C#\KinectKiro\obj\Debug\KinectSekiro.exe
+X:\Programming\C#\KinectKiro\obj\Debug\KinectSekiro.pdb
