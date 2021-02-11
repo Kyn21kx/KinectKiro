@@ -8,7 +8,7 @@ namespace KinectSekiro {
 
         private KinectSensor sensor;
         private IList<Body> bodies;
-        private BodyFrameReader reader;
+        private MultiSourceFrameReader reader;
         public Form1() {
             InitializeComponent();
             Start();
@@ -22,30 +22,36 @@ namespace KinectSekiro {
         public void Stream() {
             if (sensor != null) {
                 sensor.Open();
-                reader = sensor.BodyFrameSource.OpenReader();
-                reader.FrameArrived += OnFrame;
+                reader = sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | 
+                    FrameSourceTypes.Infrared | FrameSourceTypes.Body);
+                reader.MultiSourceFrameArrived += OnFrame;
             }
         }
 
-        private void OnFrame(object sender, BodyFrameArrivedEventArgs e) {
-            BodyFrame frame = e.FrameReference.AcquireFrame();
-            if (frame == null) return;
-            try {
-                bodies = new Body[frame.BodyCount];
-                frame.GetAndRefreshBodyData(bodies);
-                debugLabel.Text = "Body information:\n";
-                foreach (var body in bodies) {
-                    debugLabel.Text += "Lean: (" + body.Lean.X + ", " + body.Lean.Y + ")";
-                }
-            }
+        private void OnFrame(object sender, MultiSourceFrameArrivedEventArgs e) {
+            var reference = e.FrameReference.AcquireFrame();
 
-            catch (Exception err) {
-                debugLabel.Text = err.Message;
+            using (var frame = reference.BodyFrameReference.AcquireFrame()) {
+                if (frame != null) {
+
+                    bodies = new Body[frame.BodyFrameSource.BodyCount];
+
+                    frame.GetAndRefreshBodyData(bodies);
+
+                    foreach (var body in bodies) {
+                        if (body != null) {
+                            if (body.IsTracked) {
+                                debugLabel.Text = body.HandRightState.ToString();
+                            }
+                        }
+                    }
+                }
             }
 
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
+            reader.Dispose();
             sensor.Close();
         }
     }
