@@ -4,7 +4,8 @@ using Microsoft.Kinect;
 
 namespace KinectSekiro {
     class PoseTranslator {
-
+        
+        #region Variables
         /// <summary>
         /// A cached reference to the default Kinect sensor
         /// </summary>
@@ -16,9 +17,17 @@ namespace KinectSekiro {
 
         private IList<Body> bodies;
         private FrameSourceTypes sourceTypes;
-        
-        private MultiSourceFrameReader mReader;
 
+        //Declaration of a delegate method
+        public delegate void AdditionalActions();
+
+        /// <summary>
+        /// An optional additional method that the user can specify
+        /// </summary>
+        public AdditionalActions additionalActions;
+
+        private MultiSourceFrameReader mReader;
+        #endregion
         /// <summary>
         /// Initiates the translator with a sensor
         /// </summary>
@@ -28,9 +37,17 @@ namespace KinectSekiro {
             sourceTypes = FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body;
         }
 
+        public PoseTranslator(AdditionalActions additionalActions) {
+            //This is just a frankly unnecesary wrapper
+            this.Sensor = KinectSensor.GetDefault();
+            sourceTypes = FrameSourceTypes.Color | FrameSourceTypes.Depth | FrameSourceTypes.Infrared | FrameSourceTypes.Body;
+            this.additionalActions = additionalActions;
+        }
+
         ~PoseTranslator() {
             this.Dispose();
-        } 
+        }
+
 
         private void UpdateControls() {
 
@@ -39,7 +56,8 @@ namespace KinectSekiro {
         /// <summary>
         /// Opens the kinect's reader and sets up an event for a received frame
         /// </summary>
-        public void OpenReader() {
+        public void Begin() {
+            if (Sensor == null) return;
             Sensor.Open();
             mReader = Sensor.OpenMultiSourceFrameReader(sourceTypes);
             mReader.MultiSourceFrameArrived += OnSensorFrame;
@@ -49,8 +67,7 @@ namespace KinectSekiro {
         /// Closes and disposes all resources that the instance is currently using
         /// </summary>
         public void Dispose() {
-            mReader.Dispose();
-            Sensor.Close();
+            mReader?.Dispose();
             TrackedBody = null;
         }
 
@@ -85,6 +102,8 @@ namespace KinectSekiro {
             //Update the currently tracked body
             TrackedBody = GetTrackedBody(frame);
             UpdateControls();
+            //If the user has provided any additional method to run, run it here
+            additionalActions?.Invoke();
         }
     }
 }

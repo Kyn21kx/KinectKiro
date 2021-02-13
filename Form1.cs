@@ -6,53 +6,23 @@ using Microsoft.Kinect;
 namespace KinectSekiro {
     public partial class Form1 : Form {
 
-        private KinectSensor sensor;
-        private IList<Body> bodies;
-        private MultiSourceFrameReader reader;
+        PoseTranslator poseTranslator;
+
         public Form1() {
             InitializeComponent();
-            Start();
+            poseTranslator = new PoseTranslator();
+            poseTranslator.Begin();
+            poseTranslator.additionalActions = ShowHandInfo;
         }
 
-        private void Start() {
-            sensor = KinectSensor.GetDefault();
-            Stream();
-        }
-
-        public void Stream() {
-            if (sensor != null) {
-                sensor.Open();
-                reader = sensor.OpenMultiSourceFrameReader(FrameSourceTypes.Color | FrameSourceTypes.Depth | 
-                    FrameSourceTypes.Infrared | FrameSourceTypes.Body);
-                reader.MultiSourceFrameArrived += OnFrame;
-            }
-        }
-
-        private void OnFrame(object sender, MultiSourceFrameArrivedEventArgs e) {
-            MultiSourceFrame frame = e.FrameReference.AcquireFrame();
-
-            using (var bFrame = frame.BodyFrameReference.AcquireFrame()) {
-                if (bFrame != null) {
-
-                    bodies = new Body[bFrame.BodyFrameSource.BodyCount];
-
-                    bFrame.GetAndRefreshBodyData(bodies);
-
-                    foreach (var body in bodies) {
-                        if (body != null) {
-                            if (body.IsTracked) {
-                                debugLabel.Text = body.HandRightState.ToString();
-                            }
-                        }
-                    }
-                }
-            }
-
+        private void ShowHandInfo() {
+            Body body = poseTranslator.TrackedBody;
+            if (body == null) return;
+            debugLabel.Text = "Right Hand: " + body.HandRightState + "\n";
+            debugLabel.Text += "Left Hand: " + body.HandLeftState + "\n";
         }
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e) {
-            reader.Dispose();
-            sensor.Close();
         }
     }
 }
