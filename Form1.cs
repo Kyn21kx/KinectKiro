@@ -29,14 +29,14 @@ namespace KinectSekiro {
         }
 
         private void OnFrame(object sender, MultiSourceFrameArrivedEventArgs e) {
-            var reference = e.FrameReference.AcquireFrame();
+            MultiSourceFrame frame = e.FrameReference.AcquireFrame();
 
-            using (var frame = reference.BodyFrameReference.AcquireFrame()) {
-                if (frame != null) {
+            using (var bFrame = frame.BodyFrameReference.AcquireFrame()) {
+                if (bFrame != null) {
 
-                    bodies = new Body[frame.BodyFrameSource.BodyCount];
+                    bodies = new Body[bFrame.BodyFrameSource.BodyCount];
 
-                    frame.GetAndRefreshBodyData(bodies);
+                    bFrame.GetAndRefreshBodyData(bodies);
 
                     foreach (var body in bodies) {
                         if (body != null) {
