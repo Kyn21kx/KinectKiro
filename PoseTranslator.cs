@@ -50,6 +50,7 @@ namespace KinectSekiro {
 
 
         private void UpdateControls() {
+            if (TrackedBody == null) return;
 
         }
 
