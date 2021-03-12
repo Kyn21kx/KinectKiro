@@ -26,6 +26,7 @@ namespace KinectSekiro {
         private void InitializeComponent() {
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.debugLabel = new System.Windows.Forms.Label();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -47,11 +48,19 @@ namespace KinectSekiro {
             this.debugLabel.TabIndex = 1;
             this.debugLabel.Text = "Debug:";
             // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(196, 94);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(193, 20);
+            this.textBox1.TabIndex = 2;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.textBox1);
             this.Controls.Add(this.debugLabel);
             this.Controls.Add(this.pictureBox1);
             this.Name = "Form1";
@@ -67,6 +76,7 @@ namespace KinectSekiro {
 
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Label debugLabel;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
