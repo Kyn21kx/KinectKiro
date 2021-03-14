@@ -19,14 +19,14 @@ namespace KinectSekiro {
         private void ShowHandInfo() {
             Body body = poseTranslator.TrackedBody;
             if (body == null) return;
-            Process process = Process.GetCurrentProcess();
-            VirtualController controller = new VirtualController(process);
+            VirtualController controller = new VirtualController();
             debugLabel.Text = "Right Hand: " + body.HandRightState + "\n";
             debugLabel.Text += "Left Hand: " + body.HandLeftState + "\n";
             if (body.HandRightState == HandState.Closed) {
-                //SendKeys.Send("a");
-                bool result = controller.SendKeyDown(VirtualController.KeyCodes.VM_PASTE);
-                debugLabel.Text += result ? "Typed\n" : "Error\n";
+                controller.SendKeyDown(VirtualController.KeyCodes.DIK_W);
+            }
+            else if (body.HandRightState == HandState.Lasso) {
+                controller.SendKeyDown(VirtualController.KeyCodes.DIK_S);
             }
         }
 
